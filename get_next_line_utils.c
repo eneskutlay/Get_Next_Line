@@ -14,7 +14,7 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (s[i] != '\0')
@@ -24,64 +24,52 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*save(char *sv)
 {
-	size_t	i;
-	size_t	len;
+	char	*rtn;
+	int		i;
+	int		j;
 
-	i = -1;
-	len = ft_strlen(s);
-	while (++i < len + 1)
-	{
-		if (s[i] == (char)c)
-		{
-			return (((void *)&((char *)s)[i]));
-		}
-	}
-}
-
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	ldst;
-	size_t	dst_len;
-	size_t	src_len;
-
-	src_len = ft_strlen(src);
-	dst_len = ft_strlen(dst);
-	ldst = dst_len;
 	i = 0;
-	if (size > 0 && dst_len < size - 1)
+	j = 0;
+	if (!sv)
+		return (NULL);
+	while (!sv[i] && sv[i] != '\n')
+		i++;
+	if (!sv[i])
 	{
-		while (src[i] && dst_len < size - 1 - i)
-		{
-			dst[ldst] = src[i];
-			i++;
-			ldst++;
-		}
-		dst[ldst] = 0;
-	}
-	if (dst_len >= size)
-	{
-		return (size + src_len);
-	}
-	return (dst_len + src_len);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	s1_len;
-	size_t	s2_len;
-	char	*joins;
-
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
-	joins = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
-	if (!s1 || !s2 || !joins)
-	{
+		free(sv);
 		return (NULL);
 	}
-	ft_strlcpy(joins, s1, s1_len + 1);
-	ft_strlcpy(joins + (s1_len), s2, s2_len + 1);
-	return (joins);
+	rtn = malloc(sizeof(char) * ft_strlen(sv - i) + 1);
+	if (!rtn)
+		return (NULL);
+	i++;
+	while (sv[i])
+	{
+		rtn[j++] = sv[i++];
+		rtn[j] = '\0';
+		return (rtn);
+	}
+}
+
+char	*line(char *str)
+{
+	int		i;
+	char	*rtn;
+
+	i = 0;
+	if (!str)
+		return (NULL);
+	while (!str[i] && str[i] != '\n')
+		i++;
+	rtn = malloc(sizeof(char) * (i + 1));
+	if (!rtn)
+		return (NULL);
+	i = 0;
+	while (str[i] && str[i] != '\n')
+	{
+		rtn[i] = str[i];
+		i++;
+	}
 }
