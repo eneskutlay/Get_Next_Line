@@ -6,7 +6,7 @@
 /*   By: ekutlay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 01:20:24 by ekutlay           #+#    #+#             */
-/*   Updated: 2022/02/02 01:29:38 by ekutlay          ###   ########.fr       */
+/*   Updated: 2022/02/16 00:12:17 by ekutlay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,62 +14,59 @@
 
 size_t	ft_strlen(const char *s)
 {
-	int	i;
+	size_t	i;
 
-	i = 0;
 	while (s[i] != '\0')
-	{
 		i++;
-	}
 	return (i);
 }
 
-char	*save(char *sv)
+int	nlsearch(char *src)
 {
-	char	*rtn;
-	int		i;
-	int		j;
+	int	i;
 
 	i = 0;
-	j = 0;
-	if (!sv)
-		return (NULL);
-	while (!sv[i] && sv[i] != '\n')
+	if (src == NULL)
+		return (0);
+	while (src[i] != '\0')
+	{
+		if (src[i] == '\n')
+			return (1);
 		i++;
-	if (!sv[i])
-	{
-		free(sv);
-		return (NULL);
 	}
-	rtn = malloc(sizeof(char) * ft_strlen(sv - i) + 1);
-	if (!rtn)
-		return (NULL);
-	i++;
-	while (sv[i])
-	{
-		rtn[j++] = sv[i++];
-		rtn[j] = '\0';
-		return (rtn);
-	}
+	return (0);
 }
 
-char	*line(char *str)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	int		i;
-	char	*rtn;
+	size_t	i;
 
 	i = 0;
-	if (!str)
-		return (NULL);
-	while (!str[i] && str[i] != '\n')
-		i++;
-	rtn = malloc(sizeof(char) * (i + 1));
-	if (!rtn)
-		return (NULL);
-	i = 0;
-	while (str[i] && str[i] != '\n')
+	if (size > 0)
 	{
-		rtn[i] = str[i];
-		i++;
+		while (src[i] && (i < (size - 1)))
+		{
+			dst[i] = src[i];
+			i++;
+		}
+		dst[i] = 0;
 	}
+	while (src[i])
+		i++;
+	return (i);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	size_t	s1_len;
+	size_t	s2_len;
+	char	*joins;
+
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	joins = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
+	if (!s1 || !s2 || !joins)
+		return (NULL);
+	ft_strlcpy(joins, s1, s1_len + 1);
+	ft_strlcpy(joins, + (s1_len), s2, s2_len + 1);
 }
