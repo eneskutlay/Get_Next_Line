@@ -3,23 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekutlay <ekutlay@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ekutlay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 05:25:40 by ekutlay           #+#    #+#             */
-/*   Updated: 2022/05/28 05:52:23 by ekutlay           ###   ########.fr       */
+/*   Created: 2022/05/29 23:28:42 by ekutlay           #+#    #+#             */
+/*   Updated: 2022/05/29 23:48:42 by ekutlay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-
-size_t ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
-  size_t  i;
-  
-  i = 0;
-  while (s != '\0')
-    i++;
-  return (i);
+	size_t	i;
+
+	i = 0;
+	while (s != '\0')
+		i++;
+	return (i);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -39,6 +37,55 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	ldst;
+	size_t	dst_len;
+	size_t	src_len;
+
+	src_len = ft_strlen(src);
+	dst_len = ft_strlen(dst);
+	ldst = dst_len;
+	i = 0;
+	if (size > 0 && dst_len < size - 1)
+	{
+		while (src[i] && dst_len < size - 1 - i)
+		{
+			dst[ldst] = src[i];
+			i++;
+			ldst++;
+		}
+		dst[ldst] = 0;
+	}
+	if (dst_len >= size)
+	{
+		return (size + src_len);
+	}
+	return (dst_len + src_len);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	if (size > 0)
+	{
+		while (src[i] && (i < (size - 1)))
+		{
+			dst[i] = src[i];
+			i++;
+		}
+		dst[i] = 0;
+	}
+	while (src[i])
+	{
+		i++;
+	}
+	return (i);
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	s1_len;
@@ -56,82 +103,3 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_strlcat(joins + (s1_len), s2, s2_len + 1);
 	return (joins);
 }
-
-char	*ft_read_to_left_str(int fd, char *left_str)
-{
-	char	*buff;
-	int		rd_bytes;
-
-	buff = malloc(sizeof(char)*(BUFFER_SIZE + 1));
-	if (!buff)
-		return (NULL);
-	rd_bytes = 1;
-	while (!ft_strchr(left_str, '\n') && rd_bytes != 0)
-	{
-		rd_bytes = read(fd, buff, BUFFER_SIZE);
-		if (rd_bytes == -1)
-		{
-			free(buff);
-			return (NULL);
-		}
-		buff[rd_bytes] = '\0';
-		left_str = ft_strjoin(left_str, buff);
-	}
-	free(buff);
-	return (left_str);
-}
-
-char	*ft_get_line(char *left_str)
-{
-	int		i;
-	char	*str;
-
-	i = 0;
-	if (!left_str[i])
-		return (NULL);
-	while (left_str[i] && left_str[i] != '\n')
-		i++;
-	str = (char *)malloc(sizeof(char) * (i + 2));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (left_str[i] && left_str[i] != '\n')
-	{
-		str[i] = left_str[i];
-		i++;
-	}
-	if (left_str[i] == '\n')
-	{
-		str[i] = left_str[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
-}
-
-char	*ft_new_left_str(char *left_str)
-{
-	int		i;
-	int		j;
-	char	*str;
-
-	i = 0;
-	while (left_str[i] && left_str[i] != '\n')
-		i++;
-	if (!left_str[i])
-	{
-		free(left_str);
-		return (NULL);
-	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(left_str) - i + 1));
-	if (!str)
-		return (NULL);
-	i++;
-	j = 0;
-	while (left_str[i])
-		str[j++] = left_str[i++];
-	str[j] = '\0';
-	free(left_str);
-	return (str);
-}
-
