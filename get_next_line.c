@@ -6,29 +6,47 @@
 /*   By: ekutlay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 23:48:06 by ekutlay           #+#    #+#             */
-/*   Updated: 2022/05/29 23:49:11 by ekutlay          ###   ########.fr       */
+/*   Updated: 2022/05/30 05:49:18 by ekutlay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_get_line(char *left_str)
-{
-	int		i;
-	char	*str;
+#include "get_next_line.h"
 
-	i = 0;
-	if (!left_str[i])
+char	*ft_read_to_left_str(int fd, char *left_str)
+{
+	char	*buff;
+	int		rd_bytes;
+
+	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buff)
 		return (NULL);
-	while (left_str[i] && left_str[i] != '\n')
-		i++;
-	str = (char *)malloc(sizeof(char) * (i + 2));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (left_str[i] && left_str[i] != '\n')
+	rd_bytes = 1;
+	while (!ft_strchr(left_str, '\n') && rd_bytes != 0)
 	{
-		str[i] = left_str[i];
-		i++;
+		rd_bytes = read(fd, buff, BUFFER_SIZE);
+		if (rd_bytes == -1)
+		{
+			free(buff);
+			return (NULL);
+		}
+		buff[rd_bytes] = '\0';
+		left_str = ft_strjoin(left_str, buff);
 	}
-	str[i] = '\0';
-	return (str);
+	free (buff);
+	return (left_str);
+}
+
+char	*get_next_line(int fd)
+{
+	char		*line;
+	static char	*left_str;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
+	left_str = ft_read_to_left_str(fd, left_str);
+	if (!left_str)
+		return (NULL);
+	line = ft_get_line(left_str);
+	left_str = ft_new_left_str(left_str);
+	return (line);
 }
