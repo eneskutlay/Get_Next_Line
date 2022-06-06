@@ -6,13 +6,13 @@
 /*   By: ekutlay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 23:48:06 by ekutlay           #+#    #+#             */
-/*   Updated: 2022/05/30 05:49:18 by ekutlay          ###   ########.fr       */
+/*   Updated: 2022/06/02 17:21:50 by ekutlay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_read_to_left_str(int fd, char *left_str)
+char	*ft_fit_buff(int fd, char *left_str)
 {
 	char	*buff;
 	int		rd_bytes;
@@ -26,6 +26,7 @@ char	*ft_read_to_left_str(int fd, char *left_str)
 		rd_bytes = read(fd, buff, BUFFER_SIZE);
 		if (rd_bytes == -1)
 		{
+			free(left_str);
 			free(buff);
 			return (NULL);
 		}
@@ -43,10 +44,10 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	left_str = ft_read_to_left_str(fd, left_str);
+	left_str = ft_fit_buff(fd, left_str);
 	if (!left_str)
 		return (NULL);
-	line = ft_get_line(left_str);
-	left_str = ft_new_left_str(left_str);
+	line = ft_catch_new_line(left_str);
+	left_str = ft_new_next_str(left_str);
 	return (line);
 }

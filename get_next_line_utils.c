@@ -6,7 +6,7 @@
 /*   By: ekutlay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 23:28:42 by ekutlay           #+#    #+#             */
-/*   Updated: 2022/05/30 02:39:17 by ekutlay          ###   ########.fr       */
+/*   Updated: 2022/06/02 15:43:29 by ekutlay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*ft_strjoin(char *left_str, char *buff)
 	return (str);
 }
 
-char	*ft_get_line(char *left_str)
+char	*ft_catch_new_line(char *left_str)
 {
 	int		i;
 	char	*str;
@@ -98,7 +98,7 @@ char	*ft_get_line(char *left_str)
 	return (str);
 }
 
-char	*ft_new_left_str(char *left_str)
+char	*ft_new_next_str(char *left_str)
 {
 	int		i;
 	int		j;
@@ -112,7 +112,7 @@ char	*ft_new_left_str(char *left_str)
 		free(left_str);
 		return (NULL);
 	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(left_str) - i + 1));
+	str = (char *)malloc(sizeof(char) * (ft_strlen(left_str) + 1));
 	if (!str)
 		return (NULL);
 	i++;
